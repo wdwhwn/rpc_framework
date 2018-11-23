@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean class="com.baizhi.rpc.common.impl.ZKRegistry" id="zkRegistry">
+        <constructor-arg index="0" value="192.168.85.154:2181"></constructor-arg>
+    </bean>
+
+    <bean id="loadBanlancer" class="com.baizhi.rpc.common.impl.RandomLoadBanlancer"></bean>
+
+    <bean id="transporter" class="com.baizhi.rpc.common.impl.NettyRpcTransporter"></bean>
+
+    <bean id="proxy" class="com.baizhi.rpc.common.JdkProxyFactoryBean">
+        <!--目标接口信息-->
+        <constructor-arg index="0" value="com.baizhi.service.HelloService"></constructor-arg>
+        <!--注册中心-->
+        <constructor-arg index="1" ref="zkRegistry"></constructor-arg>
+        <!--负载均衡器-->
+        <constructor-arg index="2" ref="loadBanlancer"></constructor-arg>
+        <!--真正rpc远程程序调用的传输器-->
+        <constructor-arg index="3" ref="transporter"></constructor-arg>
+    </bean>
+</beans>

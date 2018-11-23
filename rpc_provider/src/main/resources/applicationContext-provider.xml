@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--注册中心-->
+    <bean class="com.baizhi.rpc.common.impl.ZKRegistry" id="zkRegistry">
+        <constructor-arg index="0" value="192.168.85.154:2181"></constructor-arg>
+    </bean>
+
+    <!--rpc服务接口的本地实现类-->
+    <bean class="com.baizhi.service.HelloServiceImpl" id="helloService"></bean>
+
+    <!--借助rpc服务工具类 发布rpc服务-->
+    <bean class="com.baizhi.rpc.common.PublishRpcServiceUtils" id="rpcServiceUtils" init-method="init">
+        <constructor-arg index="0" ref="zkRegistry"></constructor-arg>
+        <constructor-arg index="1">
+            <map>
+                <entry key="com.baizhi.service.HelloService" value-ref="helloService"></entry>
+            </map>
+        </constructor-arg>
+        <constructor-arg index="2" value="20881"></constructor-arg>
+    </bean>
+</beans>
